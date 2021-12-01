@@ -36,7 +36,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
@@ -48,7 +48,7 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Post $post)
@@ -61,7 +61,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
     public function destroy(Post $post)
