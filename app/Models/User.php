@@ -50,4 +50,9 @@ class User extends Authenticatable
     ]; */
 
     // protected $guarded = [ 'password' ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

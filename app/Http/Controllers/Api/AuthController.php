@@ -57,4 +57,29 @@ class AuthController extends Controller
         return response()->json(['token' => $user->createToken($request->email)->plainTextToken]);
         // 4
     }
+
+    public function login(Request $request)
+    {
+        // $info = [
+        //     'success' => false,
+        //     'token' => null,
+        // ];
+
+        $user = User::where('name', $request->username)->first();
+
+        if (!empty($user) && Hash::check($request->password, $user->password)) {
+            // $info['success'] = true;
+            $token = $user->createToken($user->email)->plainTextToken;
+
+            // dd($token);
+            return [
+                'success' => true,
+                'token' => $token,
+            ];
+        } else {
+            return [
+                'success' => false,
+            ];
+        }
+    }
 }
