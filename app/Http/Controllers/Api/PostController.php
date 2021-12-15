@@ -7,7 +7,9 @@ use App\Http\Resources\PostResource;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -18,6 +20,8 @@ class PostController extends Controller
      */
     public function index()
     {
+
+//        dd("index");
         // return PostResource::collection(Post::all());
         $posts = Post::with('user:id,name')->get();
 
@@ -32,9 +36,16 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        // $data = $request->validate();
 
-        $created_post = Post::create($request->all());
+//         $data = $request->validate();
+//        dd(auth()->user()->posts()->create($request->all()));
+
+//         $created_post = Post::create($request->all());
+
+        $created_post = auth()->user()->posts()->create($request->all());
+
+
+//        $created_post = Post::create($request->all());
 
         return new PostResource($created_post);
     }

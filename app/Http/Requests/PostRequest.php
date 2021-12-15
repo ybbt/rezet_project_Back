@@ -25,6 +25,7 @@ class PostRequest extends FormRequest
     {
         return [
             'text' => ['string', 'required'],
+//            'user_id'=> ['integer', 'required'],
         ];
     }
 }

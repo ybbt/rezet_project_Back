@@ -27,11 +27,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('/posts', [PostController::class, index]);
+Route::get('/posts', [PostController::class, "index"]);
+Route::get('/posts/{id}', [PostController::class, "show"]);
+Route::post('/posts', [PostController::class, "store"]);
+Route::put('/posts', [PostController::class, "update"]);
+Route::delete('/posts/{id}', [PostController::class, "destroy"]);
 
-Route::apiResources([
-    'posts' => PostController::class,
-]);
+//Route::apiResources([
+//    'posts' => PostController::class,
+//]);
+
+//Route::group(['middleware' => ['auth:sanctum']], function(){
+//    Route::apiResources([
+//        'posts' => PostController::class,
+//    ]);
+//});
 
 Route::namespace('Api')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
