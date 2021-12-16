@@ -21,7 +21,7 @@ class PostController extends Controller
     public function index()
     {
 
-//        dd("index");
+        //        dd("index");
         // return PostResource::collection(Post::all());
         $posts = Post::with('user:id,name')->get();
 
@@ -37,15 +37,15 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
 
-//         $data = $request->validate();
-//        dd(auth()->user()->posts()->create($request->all()));
+        //         $data = $request->validate();
+        //        dd(auth()->user()->posts()->create($request->all()));
 
-//         $created_post = Post::create($request->all());
+        //         $created_post = Post::create($request->all());
 
         $created_post = auth()->user()->posts()->create($request->all());
 
 
-//        $created_post = Post::create($request->all());
+        //        $created_post = Post::create($request->all());
 
         return new PostResource($created_post);
     }
@@ -72,7 +72,11 @@ class PostController extends Controller
     {
         // $data = $request->validate();
 
+        // dd(($post->all())[0]);
+
         $post->update($request->all());
+
+        // dd($request->all());
 
         return new PostResource($post);
     }

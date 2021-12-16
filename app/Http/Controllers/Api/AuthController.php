@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -17,21 +18,27 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8']
         ]);
-        // 1
+        //* 1
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 401);
         }
-        // 2    
+        //* 2    
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        // 3    
+        //* 3    
 
         $token = $user->createToken($request->email)->plainTextToken;
-        // 4    
+        //* 4    
 
         return response()->json(['token' => $token], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     public function token(Request $request)
@@ -66,6 +73,8 @@ class AuthController extends Controller
         // ];
 
         $user = User::where('name', $request->username)->first();
+
+        // dd($user->tokens()->first()->to);
 
         if (!empty($user) && Hash::check($request->password, $user->password)) {
             // $info['success'] = true;

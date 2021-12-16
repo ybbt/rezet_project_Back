@@ -27,61 +27,43 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+// Route::apiResources([
+//     'posts' => PostController::class,
+// ]);
+
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     Route::apiResources([
+//         'posts' => PostController::class,
+//     ]);
+// });
+
 Route::get('/posts', [PostController::class, "index"]);
-Route::get('/posts/{id}', [PostController::class, "show"]);
-Route::post('/posts', [PostController::class, "store"]);
-Route::put('/posts', [PostController::class, "update"]);
-Route::delete('/posts/{id}', [PostController::class, "destroy"]);
+Route::get('/posts/{post}', [PostController::class, "show"]);
+// Route::post('/posts', [PostController::class, "store"]);
+// Route::put('/posts/{post}', [PostController::class, "update"]);
+// Route::delete('/posts/{id}', [PostController::class, "destroy"]);
 
-//Route::apiResources([
-//    'posts' => PostController::class,
-//]);
-
-//Route::group(['middleware' => ['auth:sanctum']], function(){
-//    Route::apiResources([
-//        'posts' => PostController::class,
-//    ]);
-//});
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/posts', [PostController::class, "store"]);
+    Route::put('/posts/{post}', [PostController::class, "update"]);
+    Route::delete('/posts/{post}', [PostController::class, "destroy"]);
+});
 
 Route::namespace('Api')->group(function () {
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('register', [AuthController::class, 'register']); // * правильний
     Route::post('token', [AuthController::class, 'token']);
     Route::post('login', [AuthController::class, 'login']);
+    // ! треба сховати за санктумом
+    Route::post('logout', [AuthController::class, 'logout']); // * правильний
 });
 
-// * не пам'ятаю, звідки взявся. Може і не знадобитися
-Route::middleware('auth:sanctum')->get('/name', function (Request $request) {
-    return response()->json(['name' => $request->user()->name]);
-});
+// ? не пам'ятаю, звідки взявся. Може і не знадобитися
+// Route::middleware('auth:sanctum')->get('/name', function (Request $request) {
+//     return response()->json(['name' => $request->user()->name]);
+// });
 
 
 Route::middleware('auth:sanctum')->get('/auth-user', function (Request $request) {
     return new AuthResource($request->user());
 });
-
-// Route::post('login-verify', function (Request $request) {
-
-
-//     $info = [
-//         'success' => false,
-//         'token' => null,
-//     ];
-
-//     $user = User::where('name', $request->username)->first();
-
-//     if (!empty($user) && Hash::check($request->password, $user->password)) {
-//         $info['success'] = true;
-//         $token = $user->createToken($user->email)->plainTextToken;
-
-
-
-//         return [
-//             'success' => true,
-//             'token' => $token,
-//         ];
-//     } else {
-//         return [
-//             'success' => false,
-//         ];
-//     }
-// });
