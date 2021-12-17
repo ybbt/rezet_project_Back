@@ -55,7 +55,7 @@ Route::namespace('Api')->group(function () {
     Route::post('token', [AuthController::class, 'token']);
     Route::post('login', [AuthController::class, 'login']);
     // ! треба сховати за санктумом
-    Route::post('logout', [AuthController::class, 'logout']); // * правильний
+    // Route::post('logout', [AuthController::class, 'logout']); // * правильний
 });
 
 // ? не пам'ятаю, звідки взявся. Може і не знадобитися
@@ -63,7 +63,12 @@ Route::namespace('Api')->group(function () {
 //     return response()->json(['name' => $request->user()->name]);
 // });
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('logout', [AuthController::class, 'logout']); // * правильний
+});
+
 
 Route::middleware('auth:sanctum')->get('/auth-user', function (Request $request) {
+    // dd("TYT");
     return new AuthResource($request->user());
 });
