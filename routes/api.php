@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\PostController;
 use \App\Http\Controllers\Api\AuthController;
+use \App\Http\Controllers\Api\UserController;
 use App\Http\Resources\AuthResource;
 use \App\Models\User;
 
@@ -64,4 +65,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
     return new AuthResource($request->user());
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('users/{user}/posts', [UserController::class, 'users_posts']);
 });
