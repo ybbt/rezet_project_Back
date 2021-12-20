@@ -72,7 +72,7 @@ class AuthController extends Controller
         //     'token' => null,
         // ];
 
-        $user = User::where('name', $request->username)->first();
+        $user = User::where('name', $request->name)->first();
 
         // dd($user->tokens()->first()->to);
 
