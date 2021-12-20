@@ -40,9 +40,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/posts', [PostController::class, "index"]);
 Route::get('/posts/{post}', [PostController::class, "show"]);
-// Route::post('/posts', [PostController::class, "store"]);
-// Route::put('/posts/{post}', [PostController::class, "update"]);
-// Route::delete('/posts/{id}', [PostController::class, "destroy"]);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/posts', [PostController::class, "store"]);
@@ -52,10 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::namespace('Api')->group(function () {
     Route::post('register', [AuthController::class, 'register']); // * правильний
-    Route::post('token', [AuthController::class, 'token']);
     Route::post('login', [AuthController::class, 'login']);
-    // ! треба сховати за санктумом
-    // Route::post('logout', [AuthController::class, 'logout']); // * правильний
 });
 
 // ? не пам'ятаю, звідки взявся. Може і не знадобитися
@@ -68,7 +62,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 
-Route::middleware('auth:sanctum')->get('/auth-user', function (Request $request) {
-    // dd("TYT");
+Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
     return new AuthResource($request->user());
 });
