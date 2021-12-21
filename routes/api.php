@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/posts', [PostController::class, "index"]);
 Route::get('/posts/{post}', [PostController::class, "show"]);
+Route::get('/users/{user}', [UserController::class, 'show']);
+Route::get('/users/{user}/posts', [UserController::class, 'user_posts']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/posts', [PostController::class, "store"]);
@@ -67,6 +69,6 @@ Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
     return new AuthResource($request->user());
 });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('users/{user}/posts', [UserController::class, 'users_posts']);
-});
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     // Route::get('users/{user}/posts', [UserController::class, 'users_posts']);
+// });

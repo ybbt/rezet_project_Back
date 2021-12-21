@@ -45,9 +45,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return $user;
     }
 
     /**
@@ -84,12 +84,21 @@ class UserController extends Controller
         //
     }
 
-    public function users_posts(Request $request, $id)
+    public function user_posts(User $user)
     {
-        // return auth()->user()->posts;
-        // return $request->user()::find($id)->posts;
-        $users = User::with('posts')->get();
-        return $users;
-        // return auth()->user()::with(['posts'])->get();
+        // dd($id);
+        // return auth()->user()->posts->get();
+
+
+
+        // *
+        // return  User::with('posts:user_id,text,created_at')->find($id);
+        // *
+
+        // *
+        return  $user->posts()->get();
+        // *
+
+        // return User::with(['posts'])->get();
     }
 }
