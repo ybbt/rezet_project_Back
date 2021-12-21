@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+// use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Http\Response;
 
@@ -26,9 +27,11 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $created_post = Post::create($request->all());
+        $data = $request->validated();
+
+        $created_post = Post::create($data);
 
         return new PostResource($created_post);
     }
@@ -51,9 +54,11 @@ class PostController extends Controller
      * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $post->update($request->all());
+        $data = $request->validated();
+
+        $post->update($data);
 
         return new PostResource($post);
     }
