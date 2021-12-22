@@ -76,9 +76,10 @@ class AuthController extends Controller
                 'token' => $token,
             ];
         } else {
-            return [
-                'success' => false,
-            ];
+            // return [
+            //     'success' => false,
+            // ];
+            return response()->json(['succes' => false], 401);
         }
     }
 }

@@ -96,8 +96,9 @@ class UserController extends Controller
         // *
 
         // *
-        return  $user->posts()->get();
+        // return ($user::with(['posts'])->get());
         // *
+        return  $user->posts()->get();
 
         // return User::with(['posts'])->get();
     }
