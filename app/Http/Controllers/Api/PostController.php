@@ -67,11 +67,14 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $data = $request->validated();
+        $user = Auth::user();
 
-        $post->update($data);
-
-
-        // dd($request->all());
+        if ($user->can('update', $post)) {
+            $post->update($data);
+            return new PostResource($post);
+        } else {
+            return response()->json(['succes' => false], Response::HTTP_FORBIDDEN);
+        }
 
         return new PostResource($post);
     }
@@ -84,8 +87,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        $user = Auth::user();
+        if ($user->can('delete', $post)) {
 
-        return response(null, Response::HTTP_NO_CONTENT);
+            $post->delete();
+            return response()->json(['succes' => true], Response::HTTP_NO_CONTENT);
+        } else {
+            return response()->json(['succes' => false], Response::HTTP_FORBIDDEN);
+        }
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginEmailRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\LoginNameRequest;
 use App\Http\Resources\AuthResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -31,12 +32,17 @@ class AuthController extends Controller
 
 
 
-    public function login(/* Request $request */LoginRequest $request)
+    public function login(Request $request/* LoginRequest $request */)
     {
-        $credentials = $request->validated();
+        $credentials = [];
+        if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $request->login;
+        } else {
+            $credentials['name'] = $request->login;
+        }
+        $credentials['password'] = $request->password;
 
-        if (Auth::once($credentials)) {
-
+        if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
             return response()->json([
                 'success' => true,
@@ -47,6 +53,21 @@ class AuthController extends Controller
         }
     }
 
+
+    // $credentials = $request->validated();
+
+    // if (Auth::once($credentials)) {
+
+    //     $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
+    //     return response()->json([
+    //         'success' => true,
+    //         'token' => $token,
+    //     ]);
+    // } else {
+    //     return response()->json(['succes' => false], Response::HTTP_UNAUTHORIZED);
+    // }
+    // }
+
     public function authme(Request $request)
     {
         return new AuthResource($request->user());
@@ -56,6 +77,6 @@ class AuthController extends Controller
     {
         // Auth::logout();
         $request->user()->currentAccessToken()->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response()->json(['succes' => true], Response::HTTP_NO_CONTENT);
     }
 }
