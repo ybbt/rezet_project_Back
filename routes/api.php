@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\PostController;
 use \App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\UserController;
-use App\Http\Resources\AuthResource;
 use \App\Models\User;
 
 
@@ -61,13 +60,14 @@ Route::namespace('Api')->group(function () {
 // });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('logout', [AuthController::class, 'logout']); // * правильний
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('authme', [AuthController::class, 'authme']); // * правильний
 });
 
 
-Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
-    return new AuthResource($request->user());
-});
+// Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
+//     return new AuthResource($request->user());
+// });
 
 // Route::group(['middleware' => ['auth:sanctum']], function () {
 //     // Route::get('users/{user}/posts', [UserController::class, 'users_posts']);

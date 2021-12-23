@@ -3,83 +3,59 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Resources\AuthResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(/* Request $request */RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8']
-        ]);
-        //* 1
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-        //* 2    
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        //* 3    
+        $credentials = $request->validated();
+
+        $credentials['password'] = bcrypt($credentials['password']);
+        $user = User::create(/* $input */$credentials);
 
         $token = $user->createToken($request->email)->plainTextToken;
-        //* 4    
 
-        return response()->json(['token' => $token], 200);
+
+        return response()->json(['token' => $token], Response::HTTP_OK);
+    }
+
+
+
+    public function login(/* Request $request */LoginRequest $request)
+    {
+        $credentials = $request->validated();
+
+        if (Auth::once($credentials)) {
+
+            $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+            ]);
+        } else {
+            return response()->json(['succes' => false], Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function authme(Request $request)
+    {
+        return new AuthResource($request->user());
     }
 
     public function logout(Request $request)
     {
+        // Auth::logout();
         $request->user()->currentAccessToken()->delete();
         return response(null, Response::HTTP_NO_CONTENT);
-    }
-
-    // public function token(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => ['required', 'string', 'email', 'max:255'],
-    //         'password' => ['required', 'string', 'min:8'],
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['error' => $validator->errors()], 401);
-    //     }
-    //     // 1
-
-    //     $user = User::where('email', $request->email)->first();
-    //     // 2
-
-    //     if (!$user || !Hash::check($request->password, $user->password)) {
-    //         return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
-    //     }
-    //     // 3
-
-    //     return response()->json(['token' => $user->createToken($request->email)->plainTextToken]);
-    //     // 4
-    // }
-
-    public function login(Request $request)
-    {
-        $user = User::where('name', $request->name)->first();
-
-        if (!empty($user) && Hash::check($request->password, $user->password)) {
-            $token = $user->createToken($user->email)->plainTextToken;
-            return [
-                'success' => true,
-                'token' => $token,
-            ];
-        } else {
-            // return [
-            //     'success' => false,
-            // ];
-            return response()->json(['succes' => false], 401);
-        }
     }
 }
