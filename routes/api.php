@@ -54,21 +54,7 @@ Route::namespace('Api')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 });
 
-// ? не пам'ятаю, звідки взявся. Може і не знадобитися
-// Route::middleware('auth:sanctum')->get('/name', function (Request $request) {
-//     return response()->json(['name' => $request->user()->name]);
-// });
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('authme', [AuthController::class, 'authme']); // * правильний
 });
-
-
-// Route::middleware('auth:sanctum')->get('/authme', function (Request $request) {
-//     return new AuthResource($request->user());
-// });
-
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     // Route::get('users/{user}/posts', [UserController::class, 'users_posts']);
-// });

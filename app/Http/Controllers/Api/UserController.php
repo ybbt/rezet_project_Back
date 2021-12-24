@@ -86,20 +86,6 @@ class UserController extends Controller
 
     public function user_posts(User $user)
     {
-        // dd($id);
-        // return auth()->user()->posts->get();
-
-
-
-        // *
-        // return  User::with('posts:user_id,text,created_at')->find($id);
-        // *
-
-        // *
-        // return ($user::with(['posts'])->get());
-        // *
         return  $user->posts()->with('user:id,name')->get();
-
-        // return User::with(['posts'])->get();
     }
 }
