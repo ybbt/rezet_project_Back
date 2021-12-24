@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginEmailRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginNameRequest;
 use App\Http\Resources\AuthResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,15 +31,15 @@ class AuthController extends Controller
 
 
 
-    public function login(Request $request/* LoginRequest $request */)
+    public function login(/* Request $request */LoginRequest $request)
     {
-        $credentials = [];
+        $request->validated();
+        $credentials = ['password' => $request->password];
         if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
             $credentials['email'] = $request->login;
         } else {
             $credentials['name'] = $request->login;
         }
-        $credentials['password'] = $request->password;
 
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
