@@ -15,23 +15,22 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(/* Request $request */RegisterRequest $request)
+    public function register(RegisterRequest $request)
     {
 
         $credentials = $request->validated();
 
         $credentials['password'] = bcrypt($credentials['password']);
-        $user = User::create(/* $input */$credentials);
+        $user = User::create($credentials);
 
         $token = $user->createToken($request->email)->plainTextToken;
-
 
         return response()->json(['token' => $token], Response::HTTP_OK);
     }
 
 
 
-    public function login(/* Request $request */LoginRequest $request)
+    public function login(LoginRequest $request)
     {
         $request->validated();
         $credentials = ['password' => $request->password];
@@ -46,26 +45,11 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'token' => $token,
-            ]);
+            ], Response::HTTP_OK);
         } else {
             return response()->json(['succes' => false], Response::HTTP_UNAUTHORIZED);
         }
     }
-
-
-    // $credentials = $request->validated();
-
-    // if (Auth::once($credentials)) {
-
-    //     $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
-    //     return response()->json([
-    //         'success' => true,
-    //         'token' => $token,
-    //     ]);
-    // } else {
-    //     return response()->json(['succes' => false], Response::HTTP_UNAUTHORIZED);
-    // }
-    // }
 
     public function authme(Request $request)
     {
@@ -74,7 +58,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Auth::logout();
         $request->user()->currentAccessToken()->delete();
         return response()->json(['succes' => true], Response::HTTP_NO_CONTENT);
     }
