@@ -23,7 +23,7 @@ class PostController extends Controller
 
         //        dd("index");
         // return PostResource::collection(Post::all());
-        $posts = Post::with('user:id,name')->get();
+        $posts = Post::with('user:id,name,first_name,last_name')->get();
 
         return PostResource::collection($posts);
     }
