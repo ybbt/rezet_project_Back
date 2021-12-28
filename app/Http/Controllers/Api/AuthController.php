@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\AuthResource;
+use App\Http\Resources\ProfileResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -18,12 +18,10 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
 
-        $credentials = $request->validated();
+        // $credentials = $request->validated();
 
-        $credentials['password'] = bcrypt($credentials['password']);
-        $user = User::create($credentials);
-
-        $token = $user->createToken($request->email)->plainTextToken;
+        $user = User::create($request->validated());
+        $token = $user->createToken($request->header('User-Agent'))->plainTextToken;
 
         return response()->json(['token' => $token], Response::HTTP_OK);
     }
@@ -32,7 +30,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $request->validated();
+        // $loginData = $request->validated();
         $credentials = ['password' => $request->password];
         if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
             $credentials['email'] = $request->login;
@@ -40,25 +38,21 @@ class AuthController extends Controller
             $credentials['name'] = $request->login;
         }
 
+        // dd($credentials);
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken(Auth::user()->email)->plainTextToken;
+            $token = Auth::user()->createToken($request->header('User-Agent'))->plainTextToken;
             return response()->json([
-                'success' => true,
                 'token' => $token,
             ], Response::HTTP_OK);
         } else {
-            return response()->json(['succes' => false], Response::HTTP_UNAUTHORIZED);
+            return response()->json(null, Response::HTTP_UNAUTHORIZED);
         }
     }
 
-    public function authme(Request $request)
-    {
-        return new AuthResource($request->user());
-    }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['succes' => true], Response::HTTP_NO_CONTENT);
+        auth()->user()->currentAccessToken()->delete();
+        return response()->noContent();
     }
 }

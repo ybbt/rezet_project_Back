@@ -23,17 +23,17 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
-        $rule = ["password" => ['string', 'required', "max:255"]];
+        $rules = ["password" => ['string', 'required', "max:255"]];
         if (strpos($this->login, '@')) {
-            $rule['login'] = ['string', 'required', "email:rfc,dns", "max:255"];
+            $rules['login'] = ['string', 'required', "email:rfc,dns", "max:255"];
         } else
-            $rule['login'] = ['string', 'required', 'alpha_num', 'max:255'];
+            $rules['login'] = ['string', 'required', 'alpha_num', 'max:255'];
 
-        return $rule;
+        return $rules;
     }
 
     /**
-     * Получить пользовательские имена атрибутов для формирования ошибок валидатора.
+     * Get custom attribute names for generating validator errors.
      *
      * @return array
      */

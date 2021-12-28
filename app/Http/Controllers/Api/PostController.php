@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePostRequest;
 use App\Http\Resources\PostResource;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\UpdatePostRequest;
 // use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
@@ -20,10 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-
-        //        dd("index");
-        // return PostResource::collection(Post::all());
-        $posts = Post::with('user:id,name,first_name,last_name')->get();
+        $posts = Post::with('user')->get();
 
         return PostResource::collection($posts);
     }
@@ -34,14 +32,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(CreatePostRequest $request)
     {
-        $data = $request->validated();
-        //        dd(auth()->user()->posts()->create($request->all()));
-        //         $created_post = Post::create($request->all());
-        $created_post = auth()->user()->posts()->create($data);
-
-
+        $created_post = auth()->user()->posts()->create($request->validated());
 
         return new PostResource($created_post);
     }
@@ -64,17 +57,11 @@ class PostController extends Controller
      * @param  \App\Models\Post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        $data = $request->validated();
-        $user = Auth::user();
+        // $this->authorize('update', $post);
 
-        if ($user->can('update', $post)) {
-            $post->update($data);
-            return new PostResource($post);
-        } else {
-            return response()->json(['succes' => false], Response::HTTP_FORBIDDEN);
-        }
+        $post->update($request->validated());
 
         return new PostResource($post);
     }
@@ -87,13 +74,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $user = Auth::user();
-        if ($user->can('delete', $post)) {
+        // $this->authorize('delete', $post);
 
-            $post->delete();
-            return response()->json(['succes' => true], Response::HTTP_NO_CONTENT);
-        } else {
-            return response()->json(['succes' => false], Response::HTTP_FORBIDDEN);
-        }
+        $post->delete();
+
+        return response()->noContent();
+    }
+
+    public function getUserPosts(User $user)
+    {
+        return  PostResource::collection($user->posts()->with('user')->get());
     }
 }
