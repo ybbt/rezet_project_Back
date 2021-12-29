@@ -11,7 +11,7 @@ use \App\Models\User;
 
 
 // header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Authorization');
+// header('Access-Control-Allow-Headers: Authorization');
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +24,9 @@ header('Access-Control-Allow-Headers: Authorization');
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 // Route::apiResources([
@@ -41,21 +41,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/posts', [PostController::class, "index"]);
 Route::get('/posts/{post}', [PostController::class, "show"]);
-Route::get('/users/{user}', [UserController::class, 'show']);
-Route::get('/users/{user}/posts', [PostController::class, 'getUserPosts']);
+Route::get('/users/{user:name}', [UserController::class, 'show']);
+Route::get('/users/{user:name}/posts', [PostController::class, 'getAllUserPosts']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/posts', [PostController::class, "store"]);
     Route::put('/posts/{post}', [PostController::class, "update"])->can('update', 'post');
     Route::delete('/posts/{post}', [PostController::class, "destroy"])->can('delete', 'post');
-});
-
-Route::namespace('Api')->group(function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
-});
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('authme', [ProfileController::class, 'show']);
+    Route::get('me', [ProfileController::class, 'show']);
 });

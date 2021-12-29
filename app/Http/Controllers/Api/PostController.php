@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user')->get();
+        $posts = Post::orderBy('id', 'DESC')->get();
 
         return PostResource::collection($posts);
     }
@@ -34,9 +34,9 @@ class PostController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        $created_post = auth()->user()->posts()->create($request->validated());
+        $createdPost = auth()->user()->posts()->create($request->validated());
 
-        return new PostResource($created_post);
+        return new PostResource($createdPost);
     }
 
     /**
@@ -81,8 +81,8 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function getUserPosts(User $user)
+    public function getAllUserPosts(User $user)
     {
-        return  PostResource::collection($user->posts()->with('user')->get());
+        return  PostResource::collection($user->posts()->orderBy('id', 'DESC')->get());
     }
 }

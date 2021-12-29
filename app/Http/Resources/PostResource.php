@@ -16,10 +16,10 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'text' => $this->text,
+            'author_id' => $this->author_id,
+            'content' => $this->content,
             'created_at' => $this->created_at,
-            'user' => new UserResource($this->user),
+            'author' => new UserResource($this->author),
         ];
     }
 }

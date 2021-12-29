@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+
 //use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -31,21 +33,14 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        // $loginData = $request->validated();
-        $credentials = ['password' => $request->password];
-        if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $request->login;
-        } else {
-            $credentials['name'] = $request->login;
-        }
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->getCredentials())) {
             $token = Auth::user()->createToken($request->header('User-Agent'))->plainTextToken;
             return response()->json([
                 'token' => $token,
-            ], Response::HTTP_OK);
+            ]);
         } else {
-            return response()->json(null, Response::HTTP_UNAUTHORIZED);
+            // return response()->json(null, Response::HTTP_UNAUTHORIZED);
+            throw ValidationException::withMessages(["Authorization denied. Сheck the correctness of the entered data"]);
         }
     }
 

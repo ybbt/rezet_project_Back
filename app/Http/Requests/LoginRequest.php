@@ -16,6 +16,17 @@ class LoginRequest extends FormRequest
         return true;
     }
 
+    public function getCredentials()
+    {
+        $credentials = ['password' => $this->password];
+        if (filter_var($this->login, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $this->login;
+        } else {
+            $credentials['name'] = $this->login;
+        }
+        return $credentials;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
