@@ -16,15 +16,14 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-    public function getCredentials()
+    protected function prepareForValidation()
     {
-        $credentials = ['password' => $this->password];
-        if (filter_var($this->login, FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $this->login;
+        if (strpos($this->login, '@')) {
+            $this['email'] = $this->login;
         } else {
-            $credentials['name'] = $this->login;
+            $this['name'] = $this->login;
         }
-        return $credentials;
+        $this["login"] = null;
     }
 
     /**
@@ -35,29 +34,11 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         $rules = ["password" => ['string', 'required', "max:255"]];
-        if (strpos($this->login, '@')) {
-            $rules['login'] = ['string', 'required', "email:rfc,dns", "max:255"];
+        if ($this->email) {
+            $rules['email'] = ['string', 'required', "email:rfc,dns", "max:255"];
         } else
-            $rules['login'] = ['string', 'required', 'alpha_num', 'max:255'];
+            $rules['name'] = ['string', 'required', 'alpha_num', 'max:255'];
 
         return $rules;
-    }
-
-    /**
-     * Get custom attribute names for generating validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        if (strpos($this->login, '@')) {
-            return [
-                'login' => 'email address',
-            ];
-        } else {
-            return [
-                'login' => 'user name',
-            ];
-        }
     }
 }

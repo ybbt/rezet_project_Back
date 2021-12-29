@@ -6,12 +6,6 @@ use \App\Http\Controllers\Api\PostController;
 use \App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 use \App\Http\Controllers\Api\UserController;
-use \App\Models\User;
-
-
-
-// header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Headers: Authorization');
 
 /*
 |--------------------------------------------------------------------------
@@ -23,21 +17,6 @@ use \App\Models\User;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-// Route::apiResources([
-//     'posts' => PostController::class,
-// ]);
-
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     Route::apiResources([
-//         'posts' => PostController::class,
-//     ]);
-// });
 
 Route::get('/posts', [PostController::class, "index"]);
 Route::get('/posts/{post}', [PostController::class, "show"]);
