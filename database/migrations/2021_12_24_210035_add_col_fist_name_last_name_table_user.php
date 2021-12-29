@@ -14,9 +14,9 @@ class AddColFistNameLastNameTableUser extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->char('first_name', 25)->after('name');
+            $table->string('first_name')->after('name');
 
-            $table->char('last_name', 25)->after('name');
+            $table->string('last_name')->after('first_name');
         });
     }
 

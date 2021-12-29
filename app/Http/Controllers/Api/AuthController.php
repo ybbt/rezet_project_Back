@@ -7,11 +7,12 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\ProfileResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -38,7 +39,6 @@ class AuthController extends Controller
             $credentials['name'] = $request->login;
         }
 
-        // dd($credentials);
         if (Auth::attempt($credentials)) {
             $token = Auth::user()->createToken($request->header('User-Agent'))->plainTextToken;
             return response()->json([

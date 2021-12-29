@@ -14,9 +14,9 @@ class AddColUserIdTablePosts extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->bigInteger('user_id')->unsigned()->change()->after('id');
+//            $table->bigInteger('user_id')->unsigned()->change();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->after('id')->references('id')->on('users')->onDelete("cascade");
         });
     }
 
