@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\PostController;
+use \App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ProfileController;
+use \App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +18,17 @@ use \App\Http\Controllers\Api\PostController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/posts', [PostController::class, "index"]);
+Route::get('/posts/{post}', [PostController::class, "show"]);
+Route::get('/users/{user:name}', [UserController::class, 'show']);
+Route::get('/users/{user:name}/posts', [PostController::class, 'getAllUserPosts']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/posts', [PostController::class, "store"]);
+    Route::put('/posts/{post}', [PostController::class, "update"])->can('update', 'post');
+    Route::delete('/posts/{post}', [PostController::class, "destroy"])->can('delete', 'post');
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('me', [ProfileController::class, 'show']);
 });
-
-// Route::get('/posts', [PostController::class, index]);
-
-Route::apiResources([
-    'posts' => PostController::class,
-]);
