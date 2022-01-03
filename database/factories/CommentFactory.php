@@ -16,7 +16,7 @@ class CommentFactory extends Factory
     {
         return [
             'content' => $this->faker->text,
-            'author_id' => User::all()->random()->id, //<---- try this.
+            // 'author_id' => User::all()->random()->id, //<---- try this.
         ];
     }
 }

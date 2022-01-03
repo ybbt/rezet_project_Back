@@ -31,9 +31,14 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Post $post)
     {
-        $commentDate = $request->validated();
-        $commentDate['author_id'] = auth()->user()->id;
-        $createdComment = $post->comments()->create($commentDate);
+        // $commentDate = $request->validated();
+
+        // $createdComment = $post->comments()->create([
+        //     'content' => $commentDate['content'],
+        //     'author_id' => auth()->user()->id
+        // ]);
+
+        $createdComment = $post->comments()->create($request->validated());
         return new CommentResource($createdComment);
     }
 

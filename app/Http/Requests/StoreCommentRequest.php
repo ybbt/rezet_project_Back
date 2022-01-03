@@ -16,6 +16,11 @@ class StoreCommentRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this['author_id'] = auth()->user()->id;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,9 +28,9 @@ class StoreCommentRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->all());
         return [
             'content' => ['string', 'required', "max:255"],
+            'author_id' => ['required'],
         ];
     }
 }
