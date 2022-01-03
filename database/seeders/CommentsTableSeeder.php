@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Comment;
-use Illuminate\Database\Seeder;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
-class PostsTableSeeder extends Seeder
+class CommentsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,13 +18,12 @@ class PostsTableSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        $athorId = User::where('email', 'email@example.com')->first()->id;
-
         // Create 5 product records
-        for ($i = 0; $i < 5; $i++) {
-            $post = Post::create([
+        for ($i = 0; $i < 3; $i++) {
+            Comment::create([
                 'content' => $faker->paragraph,
-                'author_id' => "$athorId",
+                'post_id' => Post::all()->random()->id,
+                'author_id' => User::all()->random()->id,
             ]);
         }
     }
