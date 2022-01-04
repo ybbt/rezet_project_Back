@@ -31,27 +31,11 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Post $post)
     {
-        // $commentDate = $request->validated();
-
-        // $createdComment = $post->comments()->create([
-        //     'content' => $commentDate['content'],
-        //     'author_id' => auth()->user()->id
-        // ]);
-
         $createdComment = $post->comments()->create($request->validated());
         return new CommentResource($createdComment);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -62,8 +46,7 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        // dd($request->validated());
-        $comment->update($request->validated()); //validated() Policy
+        $comment->update($request->validated());
 
         return new CommentResource($comment);
     }
@@ -76,7 +59,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        $comment->delete(); //Policy
+        $comment->delete();
 
         return response()->noContent();
     }
