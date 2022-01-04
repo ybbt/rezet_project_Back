@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 // use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,16 +21,24 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $this->call(UsersTableSeeder::class);
-        $this->call(PostsTableSeeder::class);
-        // $this->call(CommentsTableSeeder::class);
 
-        // User::factory()->count(10)->has(Post::factory()->count(5)->has(Comment::factory()/* ->for(User::all()->random())*/->count(3)))->create();
+        $faker = \Faker\Factory::create();
 
-        // Comment::factory()->for(User::factory()->count(10)->count(3))->create();
+        $users = User::factory()->count(4)->create();
+        $userExample = User::factory()->create(['email' => "email@example.com", 'password' => 'qweasdzxc']);
+        $users->push($userExample);
+        $users->each(function ($user) use ($users) {
+            $posts = Post::factory()->count(rand(2, 10))->for($user, "author")->create();
+            $posts->each(function ($post) use ($users) {
+                // $comments = Comment::factory()->count(3)->for($post)->for($users->random(), "author")->create();
+                for ($i = 0; $i < rand(1, 6); $i++) {
+                    Comment::factory()->for($post)->for($users->random(), "author")->create();
+                }
+            });
+        });
 
-        User::factory()->count(10)->has(Post::factory()->count(5)->has(Comment::factory()->count(3)->state(new Sequence(
-            fn ($sequence) => ['author_id' => User::all()->random()->id],
-        ))))->create();
+        // User::factory()->count(10)->has(Post::factory()->count(5)->has(Comment::factory()->count(3)->state(new Sequence(
+        //     fn ($sequence) => ['author_id' => User::all()->random()->id],
+        // ))))->create();
     }
 }
