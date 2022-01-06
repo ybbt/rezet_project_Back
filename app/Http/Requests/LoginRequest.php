@@ -35,7 +35,7 @@ class LoginRequest extends FormRequest
     {
         $rules = ["password" => ['string', 'required', "max:255"]];
         if ($this->email) {
-            $rules['email'] = ['string', 'required', "email:rfc,dns", "max:255"];
+            $rules['email'] = ['string', 'required', "email:rfc,filter", "max:255"];
         } else
             $rules['name'] = ['string', 'required', 'alpha_num', 'max:255'];
 
