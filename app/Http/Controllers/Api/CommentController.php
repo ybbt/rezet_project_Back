@@ -19,7 +19,7 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
-        $comments = $post->comments()->get();
+        $comments = $post->comments()->orderBy('id', 'DESC')->get();
         return CommentResource::collection($comments);
     }
 
