@@ -17,6 +17,6 @@ class ProfileController extends Controller
      */
     public function show()
     {
-        return new ProfileResource(auth()->user());
+        return new ProfileResource(auth()->user()->profile);
     }
 }

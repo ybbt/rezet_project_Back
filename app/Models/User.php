@@ -22,8 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'first_name',
-        'last_name'
     ];
 
     /**
@@ -65,5 +63,13 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class, 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
     }
 }

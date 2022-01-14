@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $userExample = User::factory()->create(['email' => "email@example.com", 'password' => 'qweasdzxc']);
         $users->push($userExample);
         $users->each(function ($user) use ($users) {
+            Profile::factory()->for($user)->create();
             $posts = Post::factory()->count(rand(2, 10))->for($user, "author")->create();
             $posts->each(function ($post) use ($users) {
                 // $comments = Comment::factory()->count(3)->for($post)->for($users->random(), "author")->create();
@@ -36,9 +38,5 @@ class DatabaseSeeder extends Seeder
                 }
             });
         });
-
-        // User::factory()->count(10)->has(Post::factory()->count(5)->has(Comment::factory()->count(3)->state(new Sequence(
-        //     fn ($sequence) => ['author_id' => User::all()->random()->id],
-        // ))))->create();
     }
 }
