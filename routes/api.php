@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/comments/{comment}', [CommentController::class, "update"])->can('update', 'comment');
     Route::delete('/comments/{comment}', [CommentController::class, "destroy"])->can('delete', 'comment');
 
-    Route::post('/me/avatar', [ProfileController::class, 'newAvatar']);
-    Route::get('/me/avatar', [ProfileController::class, 'getAvatar']); // --- тимчасовий
+    Route::post('/me/avatar', [ProfileController::class, 'newAvatar']); // --- схоже теж тимчасовий
+    Route::get('/me/avatar', [ProfileController::class, 'getAvatar']); // --- тимчасовий 100%
+    Route::delete('/me/avatar', [ProfileController::class, 'deleteAvatar']); // --- схоже теж тимчасовий
 });

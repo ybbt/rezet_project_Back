@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'first_name' => $this->profile->first_name,
             'last_name' => $this->profile->last_name,
+            'avatar_path' => $this->profile->avatar_path,
             'posts_count' => $this->posts->count(),
         ];
     }

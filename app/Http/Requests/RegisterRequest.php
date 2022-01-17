@@ -28,7 +28,8 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             'password' => ['required', 'confirmed', 'string', 'min:8',  'alpha_num'],
             'first_name' => ['string', 'min:1', 'max:25', 'alpha'],
-            'last_name' => ['string', 'max:25', 'alpha'],
+            'last_name' => ['nullable', 'string', 'max:25', 'alpha'],
+            // 'avatar_path' => ['nullable', 'string'],
         ];
     }
 }
