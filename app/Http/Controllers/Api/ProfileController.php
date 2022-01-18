@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileResource;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,9 +22,33 @@ class ProfileController extends Controller
         return new ProfileResource(auth()->user()->profile);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Profile
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        // return response($request["first_name"]);
+        // dd($request["first_name"]);
+        // dd(auth()->user()->profile);
+
+        if ($request["avatar"] !== null) {
+            $path = $request->avatar->store('avatars');
+            $request["avatar_path"] = $path;
+        }
+        $profile = auth()->user()->profile->update($request->all()/* validated() */);
+        return $profile;
+
+        // return new PostResource($post);
+
+    }
+
     public function newAvatar(Request $request)
     {
-        // dd($request->photo);
+        // dd($request);
         $path = $request->avatar->store('avatars');
         // return Storage::disk('local')->get($path);
         Storage::delete(auth()->user()->profile->avatar_path);
