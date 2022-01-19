@@ -35,10 +35,10 @@ class ProfileController extends Controller
         // dd($request["first_name"]);
         // dd(auth()->user()->profile);
 
-        if ($request["avatar"] !== null) {
-            $path = $request->avatar->store('avatars');
-            $request["avatar_path"] = $path;
-        }
+        // if ($request["avatar"] !== null) {
+        //     $path = $request->avatar->store('avatars');
+        //     $request["avatar_path"] = $path;
+        // }
         $profile = auth()->user()->profile->update($request->all()/* validated() */);
         return $profile;
 
