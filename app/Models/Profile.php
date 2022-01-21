@@ -12,8 +12,8 @@ class Profile extends Model
         'last_name',
         'avatar_path',
         // 'background_path',
-        // 'lat',
-        // 'lng',
+        'lat',
+        'lng',
     ];
 
     use HasFactory;

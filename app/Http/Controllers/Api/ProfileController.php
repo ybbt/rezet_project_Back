@@ -73,4 +73,8 @@ class ProfileController extends Controller
         $avatar_path = ["avatar_path" => null];
         auth()->user()->profile()->update($avatar_path);
     }
+
+    public function updateLocation(Request $request)
+    {
+    }
 }
