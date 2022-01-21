@@ -76,5 +76,9 @@ class ProfileController extends Controller
 
     public function updateLocation(Request $request)
     {
+        // $request["_method"] = null;
+        // dd($request->all());
+        $loc = ["lat" => $request["lat"], "lng" => $request["lng"]];
+        auth()->user()->profile()->update($loc);
     }
 }

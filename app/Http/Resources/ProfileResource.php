@@ -20,6 +20,9 @@ class ProfileResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'avatar_path' => $this->avatar_path,
+            'lat' => $this->lat, //TODO вигадати як залишити в профайл
+            'lng' => $this->lng, //TODO вигадати як залишити в профайл
+
         ];
     }
 }
