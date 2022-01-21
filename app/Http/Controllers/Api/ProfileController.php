@@ -57,6 +57,7 @@ class ProfileController extends Controller
         return $path;
     }
 
+    // --- тимчасово для тесту
     public function getAvatar()
     {
         // dd(auth()->user()->profile->avatar_path);
@@ -64,7 +65,8 @@ class ProfileController extends Controller
         // $url = Storage::url("ii6M2s2obYHY6P8nWD6oFQTfKq17sboVLBC54wod.png");
         // dd($url);
         // return response()->file('/images/oe4icjnf0NawQjixlYjvbwPPKONs2u0RwsQkpmgI.png');
-        return response(auth()->user()->profile->avatar_path);
+        $url = asset(auth()->user()->profile->avatar_path);
+        return response($url);
     }
 
     public function deleteAvatar()
