@@ -16,10 +16,10 @@ class StoreCommentRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
-    {
-        $this['author_id'] = auth()->user()->id;
-    }
+    // protected function prepareForValidation()
+    // {
+    //     $this['author_id'] = auth()->user()->id;
+    // }
 
     /**
      * Get the validation rules that apply to the request.
@@ -30,7 +30,7 @@ class StoreCommentRequest extends FormRequest
     {
         return [
             'content' => ['string', 'required', "max:255"],
-            'author_id' => ['required'],
+            // 'author_id' => ['required'],
         ];
     }
 }

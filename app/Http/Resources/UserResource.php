@@ -19,8 +19,8 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'first_name' => $this->profile->first_name,
             'last_name' => $this->profile->last_name,
-            'avatar_path' => $this->when($this->profile->avatar_path !== null, asset($this->profile->avatar_path)), //asset($this->profile->avatar_path),
-            'posts_count' => $this->posts->count(), //TODO вигадати як перенести в профайл (не факт)
+            'avatar_path' => $this->when(isset($this->profile->avatar_path) !== null, asset($this->profile->avatar_path)), //asset($this->profile->avatar_path)
+            'posts_count' => $this->loadCount('posts')->posts_count, //$this->posts->count(), //TODO вигадати як перенести в профайл (не факт)
             'lat' => $this->profile->lat, //TODO вигадати як перенести в профайл
             'lng' => $this->profile->lng, //TODO вигадати як перенести в профайл
         ];

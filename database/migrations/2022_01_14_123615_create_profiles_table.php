@@ -20,8 +20,8 @@ class CreateProfilesTable extends Migration
             $table->string('last_name')->nullable($value = true);
             $table->string('avatar_path')->nullable($value = true);
             // $table->string('background_path');
-            $table->double('lat', 11, 8);
-            $table->double('lng', 11, 8);
+            $table->double('lat', 11, 8)->nullable($value = true);
+            $table->double('lng', 11, 8)->nullable($value = true);
             $table->timestamps();
         });
     }
