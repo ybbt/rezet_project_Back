@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Post;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -19,7 +20,7 @@ class PostResource extends JsonResource
             'content' => $this->content,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'comments_count' => $this->comments->count(),
+            'comments_count' => $this->withCount('comments')->where('id', $this->id)->first()->comments_count, //$this->comments->count(),
             'author' => new UserResource($this->author),
         ];
     }
