@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run(Generator $faker)
+    public function run(/* Generator $faker */)
     {
         // \App\Models\User::factory(10)->create();
 
