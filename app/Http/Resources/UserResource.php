@@ -18,7 +18,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'posts_count' => $this->posts->count(),
+            'posts_count' => $this->when(isset($this->posts_count), $this->posts_count),
         ];
     }
 }

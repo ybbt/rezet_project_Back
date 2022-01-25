@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use Faker\Generator;
 use Illuminate\Database\Seeder;
 
 class CommentsTableSeeder extends Seeder
@@ -14,10 +15,8 @@ class CommentsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Generator $faker)
     {
-        $faker = \Faker\Factory::create();
-
         // Create 5 product records
         for ($i = 0; $i < 3; $i++) {
             Comment::create([
@@ -26,5 +25,7 @@ class CommentsTableSeeder extends Seeder
                 'author_id' => User::all()->random()->id,
             ]);
         }
+
+        Comment::factory()->count(3)->create();
     }
 }

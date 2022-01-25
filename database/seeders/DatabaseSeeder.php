@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 // use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,11 +19,9 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Generator $faker)
     {
         // \App\Models\User::factory(10)->create();
-
-        $faker = \Faker\Factory::create();
 
         $users = User::factory()->count(4)->create();
         $userExample = User::factory()->create(['email' => "email@example.com", 'password' => 'qweasdzxc']);
@@ -30,15 +29,10 @@ class DatabaseSeeder extends Seeder
         $users->each(function ($user) use ($users) {
             $posts = Post::factory()->count(rand(2, 10))->for($user, "author")->create();
             $posts->each(function ($post) use ($users) {
-                // $comments = Comment::factory()->count(3)->for($post)->for($users->random(), "author")->create();
                 for ($i = 0; $i < rand(1, 6); $i++) {
                     Comment::factory()->for($post)->for($users->random(), "author")->create();
                 }
             });
         });
-
-        // User::factory()->count(10)->has(Post::factory()->count(5)->has(Comment::factory()->count(3)->state(new Sequence(
-        //     fn ($sequence) => ['author_id' => User::all()->random()->id],
-        // ))))->create();
     }
 }
