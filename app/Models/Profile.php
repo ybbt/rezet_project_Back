@@ -11,7 +11,7 @@ class Profile extends Model
         'first_name',
         'last_name',
         'avatar_path',
-        // 'background_path',
+        'background_path',
         'lat',
         'lng',
     ];

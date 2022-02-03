@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAvatarRequest;
+use App\Http\Requests\UpdateBackgroundRequest;
 use App\Http\Requests\UpdateCredentialsRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Http\Resources\ProfileResource;
@@ -63,6 +64,26 @@ class ProfileController extends Controller
             Storage::delete(auth()->user()->profile->avatar_path);
             $avatar_path = ["avatar_path" => $path];
             auth()->user()->profile()->update($avatar_path);
+        }
+        return new ProfileResource(auth()->user()->profile()->first());
+    }
+
+    public function newBackground(UpdateBackgroundRequest $request)
+    {
+        $background = $request->validated();
+        // dd((count($background)));
+        // return ($background["background"]);
+        if (count($background) === 0) {
+            Storage::delete(auth()->user()->profile->background_path);
+            $background_path = ["background_path" => null];
+            auth()->user()->profile()->update($background_path);
+            // response()->noContent();
+        } else {
+            $path = $request->background->store('backgrounds');
+            // return Storage::disk('local')->get($path);
+            Storage::delete(auth()->user()->profile->background_path);
+            $background_path = ["background_path" => $path];
+            auth()->user()->profile()->update($background_path);
         }
         return new ProfileResource(auth()->user()->profile()->first());
     }
