@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateAvatarRequest;
+use App\Http\Requests\UpdateCredentialsRequest;
+use App\Http\Requests\UpdateLocationRequest;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use Illuminate\Http\Request;
@@ -29,40 +32,39 @@ class ProfileController extends Controller
      * @param  \App\Models\Profile
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(UpdateCredentialsRequest $request)
     {
         // return response($request["first_name"]);
         // dd($request["first_name"]);
         // dd(auth()->user()->profile);
+        // dd($request->all());
 
         // if ($request["avatar"] !== null) {
         //     $path = $request->avatar->store('avatars');
         //     $request["avatar_path"] = $path;
         // }
-        $profile = auth()->user()->profile->update($request->all()/* validated() */);
-        return $profile;
-
-        // return new PostResource($post);
-
+        // dd($request->validated());
+        auth()->user()->profile->update($request->validated());
+        return new ProfileResource(auth()->user()->profile()->first());
     }
 
-    public function newAvatar(Request $request)
+    public function newAvatar(UpdateAvatarRequest $request)
     {
-        // dump($request->avatar);
-        if ($request->avatar === null) {
+        $avatar = $request->validated();
+        // dd(($avatar));
+        if (count($avatar) === 0) {
             Storage::delete(auth()->user()->profile->avatar_path);
             $avatar_path = ["avatar_path" => null];
             auth()->user()->profile()->update($avatar_path);
-            response()->noContent();
+            // response()->noContent();
         } else {
-            // dd($request->avatar);
             $path = $request->avatar->store('avatars');
             // return Storage::disk('local')->get($path);
             Storage::delete(auth()->user()->profile->avatar_path);
             $avatar_path = ["avatar_path" => $path];
             auth()->user()->profile()->update($avatar_path);
-            return $path;
         }
+        return new ProfileResource(auth()->user()->profile()->first());
     }
 
     // // --- тимчасово для тесту
@@ -77,18 +79,17 @@ class ProfileController extends Controller
     //     return response($url);
     // }
 
-    public function deleteAvatar()
-    {
-        Storage::delete(auth()->user()->profile->avatar_path);
-        $avatar_path = ["avatar_path" => null];
-        auth()->user()->profile()->update($avatar_path);
-    }
+    // public function deleteAvatar()
+    // {
+    //     Storage::delete(auth()->user()->profile->avatar_path);
+    //     $avatar_path = ["avatar_path" => null];
+    //     auth()->user()->profile()->update($avatar_path);
+    // }
 
-    public function updateLocation(Request $request)
+    public function updateLocation(UpdateLocationRequest $request)
     {
-        // $request["_method"] = null;
-        // dd($request->all());
-        $loc = ["lat" => $request["lat"], "lng" => $request["lng"]];
-        auth()->user()->profile()->update($loc);
+
+        auth()->user()->profile()->update($request->validated());
+        return new ProfileResource(auth()->user()->profile()->first());
     }
 }
