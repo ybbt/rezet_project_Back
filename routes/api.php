@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/comments/{comment}', [CommentController::class, "update"])->can('update', 'comment');
     Route::delete('/comments/{comment}', [CommentController::class, "destroy"])->can('delete', 'comment');
 
-    Route::post('/me/avatar', [ProfileController::class, 'newAvatar']);
-    Route::post('/me/background', [ProfileController::class, 'newBackground']);
-    Route::post('me/credentials', [ProfileController::class, 'update']);
+    Route::post('/me/avatar', [ProfileController::class, 'updateAvatar']);
+    Route::post('/me/background', [ProfileController::class, 'updateBackground']);
+    Route::post('me/credentials', [ProfileController::class, 'updateCredentials']);
     Route::put('me/location', [ProfileController::class, 'updateLocation']);
 });

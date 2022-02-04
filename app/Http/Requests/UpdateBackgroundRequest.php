@@ -24,7 +24,8 @@ class UpdateBackgroundRequest extends FormRequest
     public function rules()
     {
         return [
-            "background" => ["nullable", "image", 'mimes:jpg,png']
+            "background" => ["image", 'mimes:jpg,png'],
+            "delete" => ["sometimes", "accepted"],
         ];
     }
 }
