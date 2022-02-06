@@ -23,8 +23,8 @@ Route::get('/posts', [PostController::class, "index"]);
 Route::get('/posts/{post}', [PostController::class, "show"]);
 Route::get('/users/{user:name}', [UserController::class, 'show']);
 Route::get('/users/{user:name}/posts', [PostController::class, 'getAllUserPosts']);
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
 
@@ -32,8 +32,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/posts', [PostController::class, "store"]);
     Route::put('/posts/{post}', [PostController::class, "update"])->can('update', 'post');
     Route::delete('/posts/{post}', [PostController::class, "destroy"])->can('delete', 'post');
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('me', [ProfileController::class, 'show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [ProfileController::class, 'show']);
 
     Route::post('/posts/{post}/comments', [CommentController::class, "store"]);
     Route::put('/comments/{comment}', [CommentController::class, "update"])->can('update', 'comment');
@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/me/avatar', [ProfileController::class, 'updateAvatar']);
     Route::post('/me/background', [ProfileController::class, 'updateBackground']);
-    Route::post('me/credentials', [ProfileController::class, 'updateCredentials']);
-    Route::put('me/location', [ProfileController::class, 'updateLocation']);
+    Route::post('/me/credentials', [ProfileController::class, 'updateCredentials']);
+    Route::put('/me/location', [ProfileController::class, 'updateLocation']);
+    Route::post('/me/update', [ProfileController::class, 'update']);
 });
