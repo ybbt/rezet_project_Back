@@ -36,7 +36,7 @@ class UpdateProfileRequest extends FormRequest
             'first_name' => ['string', 'min:1', 'max:25', 'alpha'],
             'last_name' => ['nullable', 'string', 'max:25', 'alpha'],
             "avatar" => ["nullable", "image", 'mimes:jpg,png'],
-            "background" => ["image", 'mimes:jpg,png'],
+            "background" => ["nullable", "image", 'mimes:jpg,png'],
             "lat" => ["nullable", 'numeric'],
             "lng" => ["nullable", 'numeric'],
         ];
