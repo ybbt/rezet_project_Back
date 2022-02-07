@@ -101,7 +101,7 @@ class ProfileController extends Controller
                 $path = $profileData["background"]->store('backgrounds');
                 $profileData["background_path"] = $path;
             }
-            Storage::delete(auth()->user()->profile->avatar_path);
+            Storage::delete(auth()->user()->profile->background_path);
             unset($profileData["background"]);
         }
         auth()->user()->profile()->update($profileData/* validated() */);
